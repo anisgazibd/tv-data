@@ -1,0 +1,31 @@
+{
+  "notice": "স্বাগতম BD BOX TV-তে! আমাদের নতুন হাই-স্পিড সার্ভার এখন লাইভ।",
+  "banner_url": "https://sinvar.com/wp-content/uploads/2022/11/FIFA-World-Cup-Banner.jpg",
+  "poster_url": "https://placehold.co/600x400",
+  "telegram_link": "https://t.me/BD_BOX_TV_LIVE",
+  "home_video_url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+  "alert_message": "আজকের বড় ম্যাচের আপডেট পেতে আমাদের টেলিগ্রাম চ্যানেলে জয়েন করুন!",
+  "online_count": 120,
+  "match_score_notice": "বাংলাদেশ বনাম ভারত - লাইভ ম্যাচ শীঘ্রই শুরু হচ্ছে!",
+  "channels": {
+    "match_1": {
+      "match_title": "Bangladesh vs India - Live T20",
+      "tag": "CRICKET LIVE",
+      "status": "LIVE",
+      "team1_name": "Bangladesh",
+      "logo1": "https://placehold.co/100",
+      "team2_name": "India",
+      "logo2": "https://placehold.co/100",
+      "link": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+    }
+  },
+  "live_tv_channels": {
+    "tv_1": {
+      "name": "Sony Sports 1",
+      "category": "SPORTS",
+      "logo": "https://placehold.co/100",
+      "link": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+      "tv_score_notice": "এনজয় করুন হাই ডেফিনিশন স্পোর্টস স্ট্রিমিং।"
+    }
+  }
+}
