@@ -1,17 +1,17 @@
 {
-  "notice": "স্বাগতম BD BOX TV-তে! আমাদের নতুন হাই-স্পিড সার্ভার এখন লাইভ।",
+  "notice": "à¦¸à§à¦¬à¦¾à¦à¦¤à¦® BD BOX TV-à¦¤à§! à¦à¦®à¦¾à¦¦à§à¦° à¦¨à¦¤à§à¦¨ à¦¹à¦¾à¦-à¦¸à§à¦ªà¦¿à¦¡ à¦¸à¦¾à¦°à§à¦­à¦¾à¦° à¦à¦à¦¨ à¦²à¦¾à¦à¦­à¥¤",
   "banner_url": "https://sinvar.com/wp-content/uploads/2022/11/FIFA-World-Cup-Banner.jpg",
   "poster_url": "https://placehold.co/600x400",
   "telegram_link": "https://t.me/BD_BOX_TV_LIVE",
   "home_video_url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-  "alert_message": "আজকের বড় ম্যাচের আপডেট পেতে আমাদের টেলিগ্রাম চ্যানেলে জয়েন করুন!",
+  "alert_message": "à¦à¦à¦à§à¦° à¦¬à§ à¦®à§à¦¯à¦¾à¦à§à¦° à¦à¦ªà¦¡à§à¦ à¦ªà§à¦¤à§ à¦à¦®à¦¾à¦¦à§à¦° à¦à§à¦²à¦¿à¦à§à¦°à¦¾à¦® à¦à§à¦¯à¦¾à¦¨à§à¦²à§ à¦à§à§à¦¨ à¦à¦°à§à¦¨!",
   "online_count": 120,
-  "match_score_notice": "বাংলাদেশ বনাম ভারত - লাইভ ম্যাচ শীঘ্রই শুরু হচ্ছে!",
+  "match_score_notice": "à¦¬à¦¾à¦à¦²à¦¾à¦¦à§à¦¶ à¦¬à¦¨à¦¾à¦® à¦­à¦¾à¦°à¦¤ - à¦²à¦¾à¦à¦­ à¦®à§à¦¯à¦¾à¦ à¦¶à§à¦à§à¦°à¦ à¦¶à§à¦°à§ à¦¹à¦à§à¦à§!",
   "channels": {
     "match_1": {
       "match_title": "Bangladesh vs India - Live T20",
       "tag": "CRICKET LIVE",
-      "status": "LIVE",
+      "status": "FINISHED",
       "team1_name": "Bangladesh",
       "logo1": "https://placehold.co/100",
       "team2_name": "India",
@@ -25,7 +25,12 @@
       "category": "SPORTS",
       "logo": "https://placehold.co/100",
       "link": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-      "tv_score_notice": "এনজয় করুন হাই ডেফিনিশন স্পোর্টস স্ট্রিমিং।"
+      "tv_score_notice": "à¦à¦¨à¦à§ à¦à¦°à§à¦¨ à¦¹à¦¾à¦ à¦¡à§à¦«à¦¿à¦¨à¦¿à¦¶à¦¨ à¦¸à§à¦ªà§à¦°à§à¦à¦¸ à¦¸à§à¦à§à¦°à¦¿à¦®à¦¿à¦à¥¤"
     }
+  },
+  "admin_users": {},
+  "master_admin": {
+    "email": "admin@bdboxtv.com",
+    "password": "SuperSecretPass789"
   }
 }
