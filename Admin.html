@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD BOX TV - Dynamic Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary-red: #e11d48; --dark-bg: #09090b; --card-bg: #18181b; --border: #27272a; }
+        body { background-color: var(--dark-bg); color: white; font-family: 'Segoe UI', sans-serif; padding: 20px; margin: 0; }
+        .box { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; max-width: 700px; margin-left: auto; margin-right: auto; position: relative; }
+        h1 { text-align: center; color: var(--primary-red); font-size: 24px; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
+        h2 { color: var(--primary-red); margin-top: 0; font-size: 18px; border-bottom: 1px solid var(--border); padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        label { display: block; margin-top: 10px; font-size: 13px; color: #a1a1aa; font-weight: 600; }
+        input, select, button, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #3f3f46; background: #09090b; color: white; box-sizing: border-box; outline: none; transition: 0.3s; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-red); box-shadow: 0 0 5px rgba(225, 29, 72, 0.3); }
+        button { background: var(--primary-red); color: white; font-weight: bold; cursor: pointer; border: none; }
+        button:hover { background: #be123c; transform: translateY(-1px); }
+        .login-screen { max-width: 400px; margin: 100px auto; text-align: center; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .logout-btn { position: absolute; top: 20px; right: 20px; font-size: 14px; background: #3f3f46; color: white; width: auto; padding: 6px 12px; border-radius: 6px;}
+        .logout-btn:hover { background: var(--primary-red); }
+
+        .match-item { background: #09090b; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--border); }
+        .match-info { margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .match-title { font-weight: bold; font-size: 15px; color: #fff; }
+        
+        .status-button-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; border-top: 1px dashed #27272a; padding-top: 12px; }
+        .status-btn { width: auto; padding: 6px 14px; font-size: 11px; margin: 0; text-transform: uppercase; font-weight: 800; border-radius: 6px; }
+        
+        .btn-status-live { background: #ef4444; color: white; }
+        .btn-status-upcoming { background: #16a34a; color: white; }
+        .btn-status-finished { background: #71717a; color: white; }
+        
+        .btn-edit-match { background: #3b82f6; color: white; width: auto; padding: 6px 14px; font-size: 11px; margin: 0; margin-left: auto; border-radius: 6px; }
+        .btn-delete-match { background: #3f3f46; color: #f4f4f5; width: auto; padding: 6px 14px; font-size: 11px; margin: 0; }
+
+        .tag { font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 900; text-transform: uppercase; }
+        .tag-LIVE { background: #fee2e2; color: #ef4444; border: 1px solid #ef4444; }
+        .tag-UPCOMING { background: #dcfce7; color: #16a34a; border: 1px solid #16a34a; }
+        .tag-FINISHED { background: #f4f4f5; color: #71717a; border: 1px solid #71717a; }
+        
+        .helper-text { font-size: 11px; color: #71717a; margin-top: -5px; margin-bottom: 10px; }
+
+        .tv-item { background: #09090b; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+        .tv-item img { width: 45px; height: 45px; border-radius: 50%; object-fit: contain; background: #fff; padding: 2px; }
+        .tv-details { flex-grow: 1; min-width: 0; }
+        .tv-name { font-weight: bold; font-size: 14px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tv-notice-text { font-size: 11px; color: #e11d48; margin-top: 2px; font-style: italic; }
+        .tv-actions { display: flex; gap: 8px; align-items: center; }
+        .btn-tv-delete { background: #3f3f46; color: #f4f4f5; width: auto; padding: 6px 14px; font-size: 11px; margin: 0; border-radius: 6px; }
+
+        .admin-user-item { background: #09090b; padding: 10px 15px; margin: 5px 0; border-radius: 8px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;}
+        .admin-user-info { font-size: 14px; color: #fff; }
+        .admin-user-pass { font-size: 12px; color: #71717a; }
+
+        .search-container { position: relative; margin-bottom: 15px; }
+        .search-container i { position: absolute; top: 50%; left: 12px; transform: translateY(-50%); color: #71717a; font-size: 14px; }
+        .search-input { padding-left: 35px !important; margin: 0 !important; }
+
+        .collapse-header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+        .collapse-header h2 { border-bottom: none; padding-bottom: 0; margin: 0; }
+        .collapse-icon { font-size: 16px; color: #a1a1aa; transition: transform 0.3s; }
+        .collapse-content { display: none; padding-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-form" class="login-screen box">
+        <h2>🔒 Private Admin Access</h2>
+        <input type="email" id="admin-email" placeholder="Admin Email">
+        <input type="password" id="admin-pass" placeholder="Password">
+        <input type="password" id="admin-token" placeholder="GitHub Personal Access Token">
+        <p style="font-size: 11px; color: #71717a; margin-top: 5px;">টোকেনটি শুধু প্রথমবার লগইনের সময় দিতে হবে, ব্রাউজার এটি মনে রাখবে।</p>
+        <button onclick="dynamicLogin()">Login Dashboard</button>
+    </div>
+
+    <div id="dashboard" style="display: none;">
+        <div class="box" style="padding-top: 5px; padding-bottom: 5px;">
+            <button class="logout-btn" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <h1><i class="fas fa-user-shield"></i> Control Panel <span id="user-role-badge" style="font-size: 11px; background: var(--primary-red); padding: 3px 8px; border-radius: 20px; text-transform: uppercase;"></span></h1>
+        </div>
+
+        <div id="master-profile-section" class="box" style="display: none; border-color: #22c55e;">
+            <h2><i class="fas fa-user-cog" style="color: #22c55e;"></i> Master Admin Settings</h2>
+            <p class="helper-text" style="color: #22c55e;">আপনার নিজের প্রধান মাস্টার এডমিন ইমেইল ও পাসওয়ার্ড পরিবর্তন করুন।</p>
+            <div class="grid-2">
+                <div>
+                    <label>Master Email:</label>
+                    <input type="email" id="master-email-input">
+                </div>
+                <div>
+                    <label>Master Password:</label>
+                    <input type="text" id="master-pass-input">
+                </div>
+            </div>
+            <button onclick="updateMasterProfile()" style="background: #22c55e;">💾 Update Master Profile</button>
+        </div>
+
+        <div id="master-admin-section" class="box" style="display: none; border-color: #3b82f6;">
+            <h2><i class="fas fa-users-cog" style="color: #3b82f6;"></i> Customer Admin Creator Panel</h2>
+            <p class="helper-text" style="color: #3b82f6;">এখান থেকে কাস্টমার বা সহকারীদের জন্য নতুন অ্যাডমিন আইডি তৈরি ও ডিলিট করুন।</p>
+            
+            <div class="grid-2">
+                <div>
+                    <label>New Admin Email:</label>
+                    <input type="email" id="new-user-email" placeholder="customer@mail.com">
+                </div>
+                <div>
+                    <label>New Admin Password:</label>
+                    <input type="text" id="new-user-pass" placeholder="Password123">
+                </div>
+            </div>
+            <button onclick="createNewAdmin()" style="background: #3b82f6;">➕ Create New Customer Admin</button>
+
+            <h3 style="font-size: 14px; margin-top: 15px; margin-bottom: 5px; color: #a1a1aa;">Active Customer Admins:</h3>
+            <div id="admin-users-list"></div>
+        </div>
+        
+        <div class="box">
+            <h2><i class="fas fa-bullhorn"></i> Notice & App Config</h2>
+            <div class="grid-2">
+                <div>
+                    <label>App Global Notice (Home page):</label>
+                    <input type="text" id="input-notice" placeholder="Enter notice...">
+                    <button onclick="updateSingleField('notice', 'input-notice')">Update Global Notice</button>
+                </div>
+                <div>
+                    <label>Live Player Scrolling Notice:</label>
+                    <input type="text" id="input-score-notice" placeholder="লাইভ প্লেয়ারের স্ক্রোলিং বারের টেক্সট...">
+                    <button onclick="updateSingleField('match_score_notice', 'input-score-notice')" style="background: #16a34a;">Update Live Player Notice</button>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <label>Banner Image URL:</label>
+                    <input type="text" id="input-banner" placeholder="https://...">
+                    <button onclick="updateSingleField('banner_url', 'input-banner')">Update</button>
+                </div>
+                <div>
+                    <label>Online User (Manual):</label>
+                    <input type="number" id="input-online" placeholder="500">
+                    <button onclick="updateSingleField('online_count', 'input-online', true)">Update</button>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <label>Telegram Link:</label>
+                    <input type="text" id="input-telegram" placeholder="https://t.me/...">
+                    <button onclick="updateSingleField('telegram_link', 'input-telegram')">Update</button>
+                </div>
+                <div>
+                    <label>Live Stream (Home Video) URL:</label>
+                    <input type="text" id="input-home-video" placeholder="https://.../live.m3u8">
+                    <button onclick="updateSingleField('home_video_url', 'input-home-video')">Update Video Link</button>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div>
+                    <label>Player Poster Image URL:</label>
+                    <input type="text" id="input-poster" placeholder="https://.../poster.jpg">
+                    <button onclick="updateSingleField('poster_url', 'input-poster')">Update Poster Link</button>
+                </div>
+                <div>
+                    <label>Alert Popup Message:</label>
+                    <input type="text" id="input-alert" placeholder="Emergency message...">
+                    <button onclick="updateSingleField('alert_message', 'input-alert')">Update Alert</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="box" id="match-form-box">
+            <h2 id="form-title"><i class="fas fa-plus-circle"></i> Add New Match</h2>
+            <input type="hidden" id="edit-id">
+            
+            <label>Match Title:</label>
+            <input type="text" id="ch-title" placeholder="Ex: Argentina vs France | Final">
+            
+            <div class="grid-2">
+                <div>
+                    <label>Team 1 Name & Logo:</label>
+                    <input type="text" id="team1-name" placeholder="Team 1">
+                    <input type="text" id="ch-logo1" placeholder="Logo URL 1">
+                </div>
+                <div>
+                    <label>Team 2 Name & Logo:</label>
+                    <input type="text" id="team2-name" placeholder="Team 2">
+                    <input type="text" id="ch-logo2" placeholder="Logo URL 2">
+                </div>
+            </div>
+
+            <label>Stream Links (Multi-Server Support):</label>
+            <textarea id="ch-link" rows="2" placeholder="link1, link2, link3"></textarea>
+            <p class="helper-text">একাধিক সার্ভার দিতে লিংকগুলোর মাঝে কমা ( , ) ব্যবহার করুন।</p>
+
+            <div class="grid-2">
+                <div>
+                    <label>Badge Tag:</label>
+                    <input type="text" id="ch-tag" placeholder="LIVE / HD / HOT">
+                </div>
+                <div>
+                    <label>Match Status:</label>
+                    <select id="ch-status">
+                        <option value="UPCOMING">UPCOMING</option>
+                        <option value="LIVE">LIVE</option>
+                        <option value="FINISHED">FINISHED</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>Match Schedule (Required for Countdown):</label>
+            <input type="datetime-local" id="ch-time">
+            
+            <button id="main-btn" onclick="saveMatch()">🚀 Publish to Website</button>
+            <button id="cancel-btn" onclick="resetForm()" style="display:none; background:#3f3f46; margin-top:5px;">Cancel Edit</button>
+        </div>
+
+        <div class="box">
+            <div class="collapse-header" onclick="toggleCollapse('match-collapse', 'match-icon')">
+                <h2><i class="fas fa-tasks"></i> Active Matches Management</h2>
+                <i class="fas fa-chevron-down collapse-icon" id="match-icon"></i>
+            </div>
+            
+            <div id="match-collapse" class="collapse-content">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="match-search" class="search-input" placeholder="Search match by title..." onkeyup="filterMatches()">
+                </div>
+
+                <div id="admin-match-list">
+                    <p style="text-align:center; color:#a1a1aa;">Loading matches...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="box" id="tv-form-box">
+            <h2 id="tv-form-title"><i class="fas fa-tv"></i> Add Live TV Channel</h2>
+            <input type="hidden" id="edit-tv-id">
+            
+            <label>Channel Name:</label>
+            <input type="text" id="tv-name" placeholder="Ex: Somoy TV, Star Sports">
+            
+            <div class="grid-2">
+                <div>
+                    <label>Channel Logo URL:</label>
+                    <input type="text" id="tv-logo" placeholder="https://...">
+                </div>
+                <div>
+                    <label>Stream URL (.m3u8 / mp4):</label>
+                    <input type="text" id="tv-link" placeholder="https://...">
+                </div>
+            </div>
+
+            <label>Sliding Notice (TV Player):</label>
+            <input type="text" id="tv-notice" placeholder="টিভি প্লেয়ারের নিচে দেখানোর জন্য নোটিশ লিখুন...">
+
+            <label>Channel Category:</label>
+            <select id="tv-category">
+                <option value="ALL">All Channels (No Category)</option>
+                <option value="SPORTS">Sports</option>
+                <option value="ENTERTAINMENT">Entertainment</option>
+                <option value="NEWS">News</option>
+            </select>
+            
+            <button id="tv-main-btn" onclick="saveTVChannel()" style="background: #16a34a;">🚀 Add TV Channel</button>
+            <button id="tv-cancel-btn" onclick="resetTVForm()" style="display:none; background:#3f3f46; margin-top:5px;">Cancel Edit</button>
+        </div>
+
+        <div class="box">
+            <div class="collapse-header" onclick="toggleCollapse('tv-collapse', 'tv-icon')">
+                <h2><i class="fas fa-list"></i> Active Live TV Channels</h2>
+                <i class="fas fa-chevron-down collapse-icon" id="tv-icon"></i>
+            </div>
+            
+            <div id="tv-collapse" class="collapse-content">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="tv-search" class="search-input" placeholder="Search TV channel by name..." onkeyup="filterTVChannels()">
+                </div>
+
+                <div id="admin-tv-list">
+                    <p style="text-align:center; color:#a1a1aa;">Loading TV channels...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- গিটহাব কনফিগারেশন ---
+        const GITHUB_USER = "anisgazibd"; 
+        const GITHUB_REPO = "tv-data";             
+        const FILE_PATH = "data.json";
+
+        // কোড থেকে টোকেন হাওয়া! টোকেন এখন ব্রাউজারের মেমরিতে নিরাপদে থাকবে।
+        let GITHUB_TOKEN = localStorage.getItem("ghToken") || "";
+
+        const DEFAULT_MASTER_EMAIL = "admin@bdboxtv.com";
+        const DEFAULT_MASTER_PASS = "SuperSecretPass789";
+
+        let localData = {
+            notice: "আমি ভালো ",
+            banner_url: "https://sinvar.com/wp-content/uploads/2022/11/FIFA-World-Cup-Banner.jpg",
+            poster_url: "https://placehold.co/600x400",
+            telegram_link: "https://t.me/BD_BOX_TV_LIVE",
+            home_video_url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+            alert_message: "আজকের বড় ম্যাচের আপডেট পেতে আমাদের টেলিগ্রাম চ্যানেলে জয়েন করুন!",
+            online_count: 120,
+            match_score_notice: "বাংলাদেশ বনাম ভারত - লাইভ ম্যাচ শীঘ্রই শুরু হচ্ছে!",
+            master_admin: { email: DEFAULT_MASTER_EMAIL, password: DEFAULT_MASTER_PASS },
+            admin_users: {}, channels: {}, live_tv_channels: {}
+        };
+        let fileSha = "";
+
+        window.onload = function() {
+            // যদি আগে থেকে টোকেন সেভ থাকে, তবে বক্সে অটো ফিল করে দেবে
+            if(GITHUB_TOKEN) {
+                document.getElementById('admin-token').value = GITHUB_TOKEN;
+            }
+            
+            const role = localStorage.getItem("adminRole");
+            if(role && GITHUB_TOKEN) {
+                fetchFromGitHub().then(() => {
+                    showDashboard(role);
+                });
+            }
+        }
+
+        async function dynamicLogin() {
+            const email = document.getElementById('admin-email').value.trim();
+            const pass = document.getElementById('admin-pass').value;
+            const tokenInput = document.getElementById('admin-token').value.trim();
+
+            if(!email || !pass) return alert("ইমেইল এবং পাসওয়ার্ড দিন!");
+            if(!tokenInput) return alert("দয়া করে আপনার নতুন গিটহাব টোকেনটি দিন!");
+
+            // টোকেনটি মেমরিতে সেভ করে গ্লোবাল ভ্যারিয়েবলে দেওয়া হলো
+            localStorage.setItem("ghToken", tokenInput);
+            GITHUB_TOKEN = tokenInput;
+
+            await fetchFromGitHub();
+
+            const currentMasterEmail = (localData.master_admin && localData.master_admin.email) ? localData.master_admin.email : DEFAULT_MASTER_EMAIL;
+            const currentMasterPass = (localData.master_admin && localData.master_admin.password) ? localData.master_admin.password : DEFAULT_MASTER_PASS;
+
+            if(email === currentMasterEmail && pass === currentMasterPass) {
+                localStorage.setItem("adminRole", "master");
+                showDashboard("master");
+            } else {
+                let found = false;
+                let users = localData.admin_users || {};
+                
+                Object.keys(users).forEach(key => {
+                    if(users[key].email === email && users[key].password === pass) {
+                        found = true;
+                        localStorage.setItem("adminRole", "customer");
+                        showDashboard("customer");
+                    }
+                });
+
+                if(!found) {
+                    alert("ভুল ইমেইল অথবা পাসওয়ার্ড!");
+                }
+            }
+        }
+
+        function showDashboard(role) {
+            document.getElementById('login-form').style.display = "none";
+            document.getElementById('dashboard').style.display = "block";
+            document.getElementById('user-role-badge').innerText = role;
+
+            if(role === "master") {
+                document.getElementById('master-profile-section').style.display = "block";
+                document.getElementById('master-admin-section').style.display = "block";
+                loadMasterProfileFields();
+                renderAdminUsersList();
+            } else {
+                document.getElementById('master-profile-section').style.display = "none";
+                document.getElementById('master-admin-section').style.display = "none";
+            }
+
+            fillConfigFields();
+            renderMatches();
+            renderTVChannels();
+        }
+
+        function logoutAdmin() {
+            if(confirm("লগআউট করতে চান?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        async function fetchFromGitHub() {
+            const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+            try {
+                let response = await fetch(url, {
+                    headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Accept": "application/vnd.github.v3+json" },
+                    cache: "no-store"
+                });
+                if(response.ok) {
+                    let resData = await response.json();
+                    fileSha = resData.sha;
+                    let decodedData = decodeURIComponent(escape(atob(resData.content)));
+                    localData = JSON.parse(decodedData);
+                    
+                    if(!localData.channels) localData.channels = {};
+                    if(!localData.live_tv_channels) localData.live_tv_channels = {};
+                    if(!localData.admin_users) localData.admin_users = {};
+                    if(!localData.master_admin) localData.master_admin = { email: DEFAULT_MASTER_EMAIL, password: DEFAULT_MASTER_PASS };
+                } else if(response.status === 401 || response.status === 403) {
+                    alert("গিটহাব টোকেনটি ভুল অথবা এক্সপায়ার হয়ে গেছে! নতুন টোকেন দিয়ে আবার ট্রাই করুন।");
+                    localStorage.removeItem("ghToken");
+                }
+            } catch(e) {
+                console.error("গিটহাব ডেটা লোড সমস্যা: " + e.message);
+            }
+        }
+
+        async function saveToGitHub() {
+            const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+            const jsonString = JSON.stringify(localData, null, 2);
+            const contentBytes = btoa(unescape(encodeURIComponent(jsonString)));
+            const bodyData = {
+                message: "⚡ Instant Live Update via Admin Panel",
+                content: contentBytes,
+                sha: fileSha
+            };
+
+            try {
+                let response = await fetch(url, {
+                    method: "PUT",
+                    headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
+                    body: JSON.stringify(bodyData)
+                });
+                if(response.ok) {
+                    let resJson = await response.json();
+                    fileSha = resJson.content.sha; 
+                    console.log("গিটহাবে ইনস্ট্যান্ট সেভ সফল হয়েছে!");
+                } else {
+                    let errObj = await response.json();
+                    console.error("গিটহাব এরর: " + errObj.message);
+                }
+            } catch(e) {
+                console.error("সংরক্ষণ সমস্যা: " + e.message);
+            }
+        }
+
+        function loadMasterProfileFields() {
+            document.getElementById('master-email-input').value = localData.master_admin.email || DEFAULT_MASTER_EMAIL;
+            document.getElementById('master-pass-input').value = localData.master_admin.password || DEFAULT_MASTER_PASS;
+        }
+
+        function updateMasterProfile() {
+            const newEmail = document.getElementById('master-email-input').value.trim();
+            const newPass = document.getElementById('master-pass-input').value.trim();
+
+            if(!newEmail || !newPass) return alert("ইমেইল এবং পাসওয়ার্ড খালি রাখা যাবে না!");
+
+            if(confirm("মাস্টার এডমিন লগইন ডিটেইলস পরিবর্তন করতে চান?")) {
+                localData.master_admin = { email: newEmail, password: newPass };
+                saveToGitHub().then(() => {
+                    alert("মাস্টার প্রোফাইল আপডেট হয়েছে!");
+                    loadMasterProfileFields();
+                });
+            }
+        }
+
+        function createNewAdmin() {
+            const email = document.getElementById('new-user-email').value.trim();
+            const pass = document.getElementById('new-user-pass').value.trim();
+
+            if(!email || !pass) return alert("ইমেইল এবং পাসওয়ার্ড দুটিই লিখুন!");
+            
+            const currentMasterEmail = localData.master_admin.email || DEFAULT_MASTER_EMAIL;
+            if(email === currentMasterEmail || email === DEFAULT_MASTER_EMAIL) {
+                return alert("এই ইমেইলটি মাস্টার অ্যাডমিনের জন্য সংরক্ষিত!");
+            }
+
+            const userKey = "user_" + Date.now();
+            if(!localData.admin_users) localData.admin_users = {};
+            
+            localData.admin_users[userKey] = { email: email, password: pass };
+            
+            saveToGitHub().then(() => {
+                alert("নতুন কাস্টমার এডমিন তৈরি হয়েছে!");
+                document.getElementById('new-user-email').value = "";
+                document.getElementById('new-user-pass').value = "";
+                renderAdminUsersList();
+            });
+        }
+
+        function renderAdminUsersList() {
+            const container = document.getElementById('admin-users-list');
+            container.innerHTML = "";
+            const users = localData.admin_users || {};
+            
+            if(Object.keys(users).length === 0) {
+                container.innerHTML = "<p style='color:#71717a; font-size:12px;'>কোনো কাস্টমার অ্যাডমিন তৈরি করা নেই।</p>";
+                return;
+            }
+
+            Object.keys(users).forEach(key => {
+                const u = users[key];
+                container.innerHTML += `
+                    <div class="admin-user-item">
+                        <div>
+                            <div class="admin-user-info"><i class="fas fa-user"></i> ${u.email}</div>
+                            <div class="admin-user-pass">Password: ${u.password}</div>
+                        </div>
+                        <button onclick="deleteAdminUser('${key}')" style="width:auto; padding:5px 10px; font-size:11px; background:#3f3f46;"><i class="fas fa-trash"></i> Delete</button>
+                    </div>`;
+            });
+        }
+
+        function deleteAdminUser(key) {
+            if(confirm("এই কাস্টমারের অ্যাডমিন অ্যাক্সেস ডিলিট করতে চান?")) {
+                delete localData.admin_users[key];
+                saveToGitHub().then(() => renderAdminUsersList());
+            }
+        }
+
+        function fillConfigFields() {
+            document.getElementById('input-notice').value = localData.notice || "";
+            document.getElementById('input-score-notice').value = localData.match_score_notice || "";
+            document.getElementById('input-banner').value = localData.banner_url || "";
+            document.getElementById('input-telegram').value = localData.telegram_link || "";
+            document.getElementById('input-alert').value = localData.alert_message || "";
+            document.getElementById('input-home-video').value = localData.home_video_url || "";
+            document.getElementById('input-poster').value = localData.poster_url || "";
+            document.getElementById('input-online').value = localData.online_count || 0;
+        }
+
+        function updateSingleField(key, inputId, isNum = false) {
+            let val = document.getElementById(inputId).value;
+            localData[key] = isNum ? parseInt(val) || 0 : val;
+            saveToGitHub().then(() => alert("ফিল্ডটি সফলভাবে আপডেট হয়েছে!"));
+        }
+
+        function renderMatches() {
+            const container = document.getElementById('admin-match-list');
+            container.innerHTML = "";
+            let chs = localData.channels;
+            if(!chs || Object.keys(chs).length === 0) {
+                container.innerHTML = "No matches.";
+                return;
+            }
+
+            Object.keys(chs).forEach(key => {
+                let m = chs[key];
+                container.innerHTML += `
+                    <div class="match-item">
+                        <div class="match-info">
+                            <span class="match-title">${m.match_title}</span>
+                            <span class="tag tag-${m.status}">${m.status}</span>
+                        </div>
+                        <div class="status-button-group">
+                            <button class="status-btn btn-status-live" onclick="setMatchStatus('${key}','LIVE')">LIVE</button>
+                            <button class="status-btn btn-status-upcoming" onclick="setMatchStatus('${key}','UPCOMING')">UPCOMING</button>
+                            <button class="status-btn btn-status-finished" onclick="setMatchStatus('${key}','FINISHED')">FINISHED</button>
+                            <button class="btn-edit-match" onclick="editMatch('${key}')">EDIT</button>
+                            <button class="btn-delete-match" onclick="deleteMatch('${key}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
+            });
+            filterMatches();
+        }
+
+        function saveMatch() {
+            const id = document.getElementById('edit-id').value;
+            const matchKey = id ? id : "match_" + Date.now();
+            
+            localData.channels[matchKey] = {
+                match_title: document.getElementById('ch-title').value,
+                team1_name: document.getElementById('team1-name').value || "TBA",
+                team2_name: document.getElementById('team2-name').value || "TBA",
+                logo1: document.getElementById('ch-logo1').value || "https://placehold.co/100",
+                logo2: document.getElementById('ch-logo2').value || "https://placehold.co/100",
+                link: document.getElementById('ch-link').value,
+                tag: document.getElementById('ch-tag').value || "HOT",
+                status: document.getElementById('ch-status').value,
+                match_time: document.getElementById('ch-time').value ? new Date(document.getElementById('ch-time').value).toISOString() : ""
+            };
+
+            if(!localData.channels[matchKey].match_title || !localData.channels[matchKey].link) return alert("Title & Link needed!");
+
+            saveToGitHub().then(() => {
+                alert("ম্যাচ সফলভাবে পাবলিশ হয়েছে!");
+                renderMatches();
+                resetForm();
+            });
+        }
+
+        function setMatchStatus(key, s) {
+            if(localData.channels[key]) {
+                localData.channels[key].status = s;
+                saveToGitHub().then(() => renderMatches());
+            }
+        }
+
+        function deleteMatch(key) {
+            if(confirm("ম্যাচটি ডিলিট করতে চান?")) {
+                delete localData.channels[key];
+                saveToGitHub().then(() => renderMatches());
+            }
+        }
+
+        function editMatch(key) {
+            let d = localData.channels[key];
+            document.getElementById('edit-id').value = key;
+            document.getElementById('ch-title').value = d.match_title;
+            document.getElementById('team1-name').value = d.team1_name || "";
+            document.getElementById('team2-name').value = d.team2_name || "";
+            document.getElementById('ch-logo1').value = d.logo1 || "";
+            document.getElementById('ch-logo2').value = d.logo2 || "";
+            document.getElementById('ch-link').value = d.link;
+            document.getElementById('ch-status').value = d.status;
+            document.getElementById('ch-tag').value = d.tag;
+            if(d.match_time) {
+                let dt = new Date(d.match_time);
+                dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+                document.getElementById('ch-time').value = dt.toISOString().slice(0,16);
+            }
+            document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Match';
+            document.getElementById('main-btn').innerText = "💾 Save Changes";
+            document.getElementById('cancel-btn').style.display = "block";
+            document.getElementById('match-form-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetForm() {
+            document.getElementById('edit-id').value = "";
+            document.getElementById('ch-title').value = "";
+            document.getElementById('team1-name').value = "";
+            document.getElementById('team2-name').value = "";
+            document.getElementById('ch-logo1').value = "";
+            document.getElementById('ch-logo2').value = "";
+            document.getElementById('ch-link').value = "";
+            document.getElementById('ch-tag').value = "";
+            document.getElementById('ch-status').value = "UPCOMING";
+            document.getElementById('ch-time').value = "";
+            document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Match ';
+            document.getElementById('main-btn').innerText = "🚀 Publish to Website";
+            document.getElementById('cancel-btn').style.display = "none";
+        }
+
+        function renderTVChannels() {
+            const container = document.getElementById('admin-tv-list');
+            container.innerHTML = "";
+            let tvs = localData.live_tv_channels;
+            if(!tvs || Object.keys(tvs).length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#a1a1aa;">No TV channels added.</p>';
+                return;
+            }
+
+            Object.keys(tvs).forEach(key => {
+                let tv = tvs[key];
+                const noticeDisplay = tv.tv_score_notice ? `<div class="tv-notice-text"><i class="fas fa-bullhorn"></i> Notice: ${tv.tv_score_notice}</div>` : '';
+                container.innerHTML += `
+                    <div class="tv-item">
+                        <img src="${tv.logo || 'https://placehold.co/100'}" alt="logo">
+                        <div class="tv-details">
+                            <div class="tv-name">${tv.name}</div>
+                            ${noticeDisplay} 
+                        </div>
+                        <div class="tv-actions">
+                            <button class="btn-edit-match" onclick="editTVChannel('${key}')">EDIT</button>
+                            <button class="btn-tv-delete" onclick="deleteTVChannel('${key}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
+            });
+            filterTVChannels();
+        }
+
+        function saveTVChannel() {
+            const id = document.getElementById('edit-tv-id').value;
+            const tvKey = id ? id : "tv_" + Date.now();
+
+            localData.live_tv_channels[tvKey] = {
+                name: document.getElementById('tv-name').value,
+                logo: document.getElementById('tv-logo').value || "https://placehold.co/100",
+                link: document.getElementById('tv-link').value,
+                tv_score_notice: document.getElementById('tv-notice').value || "", 
+                category: document.getElementById('tv-category').value 
+            };
+
+            if(!localData.live_tv_channels[tvKey].name || !localData.live_tv_channels[tvKey].link) return alert("Channel Name & Stream Link needed!");
+
+            saveToGitHub().then(() => {
+                alert("টিভি চ্যানেল সফলভাবে আপডেট হয়েছে!");
+                renderTVChannels();
+                resetTVForm();
+            });
+        }
+
+        function editTVChannel(key) {
+            let d = localData.live_tv_channels[key];
+            document.getElementById('edit-tv-id').value = key;
+            document.getElementById('tv-name').value = d.name;
+            document.getElementById('tv-logo').value = d.logo || "";
+            document.getElementById('tv-link').value = d.link;
+            document.getElementById('tv-notice').value = d.tv_score_notice || ""; 
+            document.getElementById('tv-category').value = d.category || "ALL"; 
+            
+            document.getElementById('tv-form-title').innerHTML = '<i class="fas fa-edit"></i> Edit TV Channel';
+            document.getElementById('tv-main-btn').innerText = "💾 Save TV Changes";
+            document.getElementById('tv-main-btn').style.background = "#3b82f6";
+            document.getElementById('tv-cancel-btn').style.display = "block";
+            document.getElementById('tv-form-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function deleteTVChannel(key) {
+            if(confirm("টিভি চ্যানেলটি ডিলিট করতে চান?")) {
+                delete localData.live_tv_channels[key];
+                saveToGitHub().then(() => renderTVChannels());
+            }
+        }
+
+        function resetTVForm() {
+            document.getElementById('edit-tv-id').value = "";
+            document.getElementById('tv-name').value = "";
+            document.getElementById('tv-logo').value = "";
+            document.getElementById('tv-link').value = "";
+            document.getElementById('tv-notice').value = ""; 
+            document.getElementById('tv-category').value = "ALL"; 
+            document.getElementById('tv-form-title').innerHTML = '<i class="fas fa-tv"></i> Add Live TV Channel';
+            document.getElementById('tv-main-btn').innerText = "🚀 Add TV Channel";
+            document.getElementById('tv-main-btn').style.background = "#16a34a";
+            document.getElementById('tv-cancel-btn').style.display = "none";
+        }
+
+        function filterMatches() {
+            const query = document.getElementById('match-search').value.toLowerCase();
+            document.querySelectorAll('#admin-match-list .match-item').forEach(item => {
+                const title = item.querySelector('.match-title').innerText.toLowerCase();
+                item.style.display = title.includes(query) ? "" : "none";
+            });
+        }
+
+        function filterTVChannels() {
+            const query = document.getElementById('tv-search').value.toLowerCase();
+            document.querySelectorAll('#admin-tv-list .tv-item').forEach(item => {
+                const name = item.querySelector('.tv-name').innerText.toLowerCase();
+                item.style.display = name.includes(query) ? "flex" : "none";
+            });
+        }
+
+        function toggleCollapse(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                icon.style.transform = "rotate(0deg)";
+            } else {
+                content.style.display = "block";
+                icon.style.transform = "rotate(180deg)";
+            }
+        }
+    </script>
+</body>
+</html>
