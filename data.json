@@ -10,13 +10,14 @@
   "channels": {
     "match_1": {
       "match_title": "Bangladesh vs India - Live T20",
+      "team1_name": "Bangladesh",
+      "team2_name": "India",
+      "logo1": "https://placehold.co/100",
+      "logo2": "https://placehold.co/100",
+      "link": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
       "tag": "CRICKET LIVE",
       "status": "UPCOMING",
-      "team1_name": "Bangladesh",
-      "logo1": "https://placehold.co/100",
-      "team2_name": "India",
-      "logo2": "https://placehold.co/100",
-      "link": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+      "match_time": "2026-06-09T11:32:00.000Z"
     }
   },
   "live_tv_channels": {
